@@ -6,7 +6,7 @@
 #    By: kcosta <kcosta@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/01/28 11:35:15 by kcosta            #+#    #+#              #
-#    Updated: 2019/01/28 18:20:55 by kcosta           ###   ########.fr        #
+#    Updated: 2019/01/29 00:07:30 by kcosta           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,6 +14,7 @@ from DSLR.math import count_, mean_, std_, min_, max_, percentile_
 
 import csv
 import numpy as np
+import matplotlib
 import matplotlib.pyplot as plt
 
 def describe(filename):
@@ -58,12 +59,23 @@ def load_csv(filename):
   return np.array(dataset, dtype=object)
 
 def histogram(X, legend, title, xlabel, ylabel):
-  plt.hist(X[:327], color='red', alpha=0.5)
-  plt.hist(X[327:856], color='yellow', alpha=0.5)
-  plt.hist(X[856:1299], color='blue', alpha=0.5)
-  plt.hist(X[1299:], color='green', alpha=0.5)
+  h1 = X[:327]
+  h1 = h1[~np.isnan(h1)]
+  plt.hist(h1, color='red', alpha=0.5)
 
-  plt.legend(legend, loc='upper right')
+  h2 = X[327:856]
+  h2 = h2[~np.isnan(h2)]
+  plt.hist(h2, color='yellow', alpha=0.5)
+
+  h3 = X[856:1299]
+  h3 = h3[~np.isnan(h3)]
+  plt.hist(h3, color='blue', alpha=0.5)
+
+  h4 = X[1299:]
+  h4 = h4[~np.isnan(h4)]
+  plt.hist(h4, color='green', alpha=0.5)
+
+  plt.legend(legend, loc='upper right', frameon=False)
   plt.title(title)
   plt.xlabel(xlabel)
   plt.ylabel(ylabel)
@@ -75,7 +87,7 @@ def scatter_plot(X, y, legend, xlabel, ylabel):
   plt.scatter(X[856:1299], y[856:1299], color='blue', alpha=0.5)
   plt.scatter(X[1299:], y[1299:], color='green', alpha=0.5)
 
-  plt.legend(legend, loc='upper right')
+  plt.legend(legend, loc='upper right', frameon=False)
   plt.xlabel(xlabel)
   plt.ylabel(ylabel)
   plt.show()
@@ -98,22 +110,43 @@ def pair_plot_hist(ax, X):
   ax.hist(h4, alpha=0.5)
 
 def pair_plot_scatter(ax, X, y):
-  ax.scatter(X[:327], y[:327], color='red', alpha=0.5)
-  ax.scatter(X[327:856], y[327:856], color='yellow', alpha=0.5)
-  ax.scatter(X[856:1299], y[856:1299], color='blue', alpha=0.5)
-  ax.scatter(X[1299:], y[1299:], color='green', alpha=0.5)
+  ax.scatter(X[:327], y[:327], s=1, color='red', alpha=0.5)
+  ax.scatter(X[327:856], y[327:856], s=1, color='yellow', alpha=0.5)
+  ax.scatter(X[856:1299], y[856:1299], s=1, color='blue', alpha=0.5)
+  ax.scatter(X[1299:], y[1299:], s=1, color='green', alpha=0.5)
 
 def pair_plot(dataset, features, legend):
-  size = 5 #dataset.shape[1]
+  font = {'family' : 'DejaVu Sans',
+          'weight' : 'light',
+          'size'   : 7}
+  matplotlib.rc('font', **font)
 
-  _, ax = plt.subplots(nrows=size, ncols=size, constrained_layout=True)
-  for i in range(0, size):
-    for j in range(0, size):
-      X = dataset[:, i]
-      y = dataset[:, j]
-      if i == j:
-        pair_plot_hist(ax[i, j], X)
+  size = dataset.shape[1]
+  _, ax = plt.subplots(nrows=size, ncols=size)
+  plt.subplots_adjust(wspace=0.15, hspace=0.15)
+
+  for row in range(0, size):
+    for col in range(0, size):
+      X = dataset[:, col]
+      y = dataset[:, row]
+
+      if col == row:
+        pair_plot_hist(ax[row, col], X)
       else:
-        pair_plot_scatter(ax[i, j], X, y)
-  plt.legend(legend)
+        pair_plot_scatter(ax[row, col], X, y)
+
+      if ax[row, col].is_last_row():
+        ax[row, col].set_xlabel(features[col].replace(' ', '\n'))
+      else:
+        ax[row, col].tick_params(labelbottom=False)
+
+      if ax[row, col].is_first_col():
+        ax[row, col].set_ylabel(features[row].replace(' ', '\n'))
+      else:
+        ax[row, col].tick_params(labelleft=False)
+
+      ax[row, col].spines['right'].set_visible(False)
+      ax[row, col].spines['top'].set_visible(False)
+
+  plt.legend(legend, loc='center left', frameon=False, bbox_to_anchor=(1, 0.5))
   plt.show()

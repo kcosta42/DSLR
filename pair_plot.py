@@ -10,7 +10,7 @@ if __name__ == '__main__':
   data = dataset[1:, 6:]
   data = data[data[:, 1].argsort()]
 
-  features = data[0, :]
+  features = dataset[0, 6:]
   legend = ['Grynffindor', 'Hufflepuff', 'Ravenclaw', 'Slytherin']
 
   pair_plot(np.array(data, dtype=float), features, legend)
