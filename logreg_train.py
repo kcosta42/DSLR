@@ -5,11 +5,20 @@ from DSLR.model import LogisticRegression
 
 from sklearn.metrics import accuracy_score
 
+import argparse
+
+import matplotlib.pyplot as plt
+
 import pandas as pd
 import numpy as np
 
 if __name__ == '__main__':
-  df = pd.read_csv('./datasets/dataset_train.csv')
+  parser = argparse.ArgumentParser()
+  parser.add_argument("dataset", type=str, help="input dataset")
+  parser.add_argument('-v', '--visual', action="store_true", help="Show model")
+  args = parser.parse_args()
+
+  df = pd.read_csv(args.dataset)
   df = df.dropna(subset=['Defense Against the Dark Arts'])
   df = df.dropna(subset=['Charms'])
   df = df.dropna(subset=['Herbology'])
@@ -18,7 +27,7 @@ if __name__ == '__main__':
   X = np.array(df.values[1:, [9, 17, 8, 10, 11]], dtype=float)
   y = df.values[1:, 1]
 
-  X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3)
+  X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=1)
 
   sc = StandardScaler()
   sc.fit(X_train)
@@ -26,12 +35,25 @@ if __name__ == '__main__':
   X_train_std = sc.transform(X_train)
   X_test_std = sc.transform(X_test)
 
-  lr = LogisticRegression(eta=0.1, max_iter=250)
+  lr = LogisticRegression(eta=0.01, max_iter=50, Lambda=0)
   lr.fit(X_train_std, y_train)
 
-  K = np.unique(y).tolist()
+  if (args.visual):
+    _, ax = plt.subplots(nrows=1, ncols=2, figsize=(16, 8), constrained_layout=True)
+
+    ax[0].plot(range(1, len(lr._cost) + 1), lr._cost, marker='o')
+    ax[0].set_xlabel('Epochs')
+    ax[0].set_ylabel('Cost function')
+    ax[0].set_title('Logistic Regression - Learning rate 0.01 / Lambda 0')
+
+    ax[1].plot(range(1, len(lr._errors) + 1), lr._errors, marker='o')
+    ax[1].set_xlabel('Epochs')
+    ax[1].set_ylabel('Misclassification')
+    ax[1].set_title('Logistic Regression - Learning rate 0.01 / Lambda 0')
+    plt.show()
 
   y_pred = lr.predict(X_test_std)
-  y_pred = [K[x] for x in y_pred]
   print(f'Misclasified samples: {sum(y_test != y_pred)}')
   print(f'Accuracy: {accuracy_score(y_test, y_pred):.2f}')
+
+  lr.save_model(sc)

@@ -6,7 +6,7 @@
 #    By: kcosta <kcosta@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/01/29 10:22:50 by kcosta            #+#    #+#              #
-#    Updated: 2019/01/29 13:50:19 by kcosta           ###   ########.fr        #
+#    Updated: 2019/01/31 14:10:36 by kcosta           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -48,9 +48,9 @@ class StandardScaler(object):
   _std: 1d-array, shape [n_features]
     Standard deviation of the training samples or one
   """
-  def __init__(self):
-    self._mean = np.array([])
-    self._std = np.array([])
+  def __init__(self, mean=np.array([]), std=np.array([])):
+    self._mean = mean
+    self._std = std
 
   def fit(self, X):
     """Compute the mean and std to be used for later scaling.
