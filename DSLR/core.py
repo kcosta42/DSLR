@@ -6,7 +6,7 @@
 #    By: kcosta <kcosta@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/01/28 11:35:15 by kcosta            #+#    #+#              #
-#    Updated: 2019/01/29 00:07:30 by kcosta           ###   ########.fr        #
+#    Updated: 2019/02/05 10:39:11 by kcosta           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,6 +27,8 @@ def describe(filename):
     try:
       data = np.array(dataset[:, i], dtype=float)
       data = data[~np.isnan(data)]
+      if not data.any():
+        raise Exception()
       print(f'{count_(data):>12.4f}', end=' |')
       print(f'{mean_(data):>12.4f}', end=' |')
       print(f'{std_(data):>12.4f}', end=' |')

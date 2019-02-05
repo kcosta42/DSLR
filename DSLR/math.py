@@ -6,14 +6,19 @@
 #    By: kcosta <kcosta@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/01/28 11:35:59 by kcosta            #+#    #+#              #
-#    Updated: 2019/01/28 14:19:15 by kcosta           ###   ########.fr        #
+#    Updated: 2019/02/05 10:38:57 by kcosta           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 import numpy as np
 
 def count_(X):
-  return len(X)
+  try:
+    X = X.astype('float')
+    X = X[~np.isnan(X)]
+    return len(X)
+  except:
+    return len(X)
 
 def mean_(X):
   total = 0

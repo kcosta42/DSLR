@@ -6,7 +6,7 @@
 #    By: kcosta <kcosta@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/01/29 10:11:37 by kcosta            #+#    #+#              #
-#    Updated: 2019/01/31 14:59:37 by kcosta           ###   ########.fr        #
+#    Updated: 2019/02/05 10:44:35 by kcosta           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -78,7 +78,7 @@ class LogisticRegression(object):
       rhs = (1 - yVec).T.dot(np.log(1 - predictions))
 
       r1 = (self.Lambda / (2 * m)) * sum(sum(self._w[:, 1:] ** 2))
-      cost = (-1 / m) * sum(sum(lhs + rhs)) + r1
+      cost = (-1 / m) * sum(lhs + rhs) + r1
       self._cost.append(cost)
       self._errors.append(sum(y != self.predict(X)))
 

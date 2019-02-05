@@ -17,13 +17,8 @@ if __name__ == '__main__':
   args = parser.parse_args()
 
   df = pd.read_csv(args.dataset)
-  df = df.dropna(subset=['Defense Against the Dark Arts'])
-  df = df.dropna(subset=['Charms'])
-  df = df.dropna(subset=['Herbology'])
-  df = df.dropna(subset=['Divination'])
-  df = df.dropna(subset=['Muggle Studies'])
-  X = np.array(df.values[1:, [9, 17, 8, 10, 11]], dtype=float)
-  y = df.values[1:, 1]
+  df = df.fillna(method='ffill')
+  X = np.array(df.values[:, [9, 17, 8, 10, 11]], dtype=float)
 
   df = pd.read_csv(args.weights)
   K = list(df)[:4]
@@ -37,6 +32,7 @@ if __name__ == '__main__':
   lr = LogisticRegression(initial_weight=weights,multi_class=K)
 
   y_pred = lr.predict(X_std)
+
   f = open("houses.csv", 'w+')
   f.write('Index,Hogwarts House\n')
   for i in range(0, len(y_pred)):

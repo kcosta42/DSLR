@@ -19,15 +19,16 @@ if __name__ == '__main__':
   args = parser.parse_args()
 
   df = pd.read_csv(args.dataset)
+  # df = df.fillna(method='ffill')
   df = df.dropna(subset=['Defense Against the Dark Arts'])
   df = df.dropna(subset=['Charms'])
   df = df.dropna(subset=['Herbology'])
   df = df.dropna(subset=['Divination'])
   df = df.dropna(subset=['Muggle Studies'])
-  X = np.array(df.values[1:, [9, 17, 8, 10, 11]], dtype=float)
-  y = df.values[1:, 1]
+  X = np.array(df.values[:, [9, 17, 8, 10, 11]], dtype=float)
+  y = df.values[:, 1]
 
-  X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=1)
+  X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=4)
 
   sc = StandardScaler()
   sc.fit(X_train)
@@ -35,7 +36,7 @@ if __name__ == '__main__':
   X_train_std = sc.transform(X_train)
   X_test_std = sc.transform(X_test)
 
-  lr = LogisticRegression(eta=0.01, max_iter=50, Lambda=0)
+  lr = LogisticRegression(eta=0.01, max_iter=50, Lambda=3)
   lr.fit(X_train_std, y_train)
 
   if (args.visual):
