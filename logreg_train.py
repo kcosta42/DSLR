@@ -36,7 +36,7 @@ if __name__ == '__main__':
   X_train_std = sc.transform(X_train)
   X_test_std = sc.transform(X_test)
 
-  lr = LogisticRegression(eta=0.01, max_iter=50, Lambda=3)
+  lr = LogisticRegression(eta=0.01, max_iter=50, Lambda=10)
   lr.fit(X_train_std, y_train)
 
   if (args.visual):
@@ -45,12 +45,12 @@ if __name__ == '__main__':
     ax[0].plot(range(1, len(lr._cost) + 1), lr._cost, marker='o')
     ax[0].set_xlabel('Epochs')
     ax[0].set_ylabel('Cost function')
-    ax[0].set_title('Logistic Regression - Learning rate 0.01 / Lambda 0')
+    ax[0].set_title('Logistic Regression - Learning rate 0.01 / Lambda 10')
 
     ax[1].plot(range(1, len(lr._errors) + 1), lr._errors, marker='o')
     ax[1].set_xlabel('Epochs')
     ax[1].set_ylabel('Misclassification')
-    ax[1].set_title('Logistic Regression - Learning rate 0.01 / Lambda 0')
+    ax[1].set_title('Logistic Regression - Learning rate 0.01 / Lambda 10')
     plt.show()
 
   y_pred = lr.predict(X_test_std)
