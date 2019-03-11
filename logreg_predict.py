@@ -1,5 +1,3 @@
-#!/Users/kcosta/.brew/bin/python3
-
 from DSLR.preprocessing import StandardScaler
 from DSLR.model import LogisticRegression
 
@@ -37,4 +35,3 @@ if __name__ == '__main__':
   f.write('Index,Hogwarts House\n')
   for i in range(0, len(y_pred)):
     f.write(f'{i},{y_pred[i]}\n')
-

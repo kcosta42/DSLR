@@ -1,5 +1,3 @@
-#!/Users/kcosta/.brew/bin/python3
-
 from DSLR.preprocessing import StandardScaler, train_test_split
 from DSLR.model import LogisticRegression
 

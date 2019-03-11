@@ -1,5 +1,3 @@
-#!/Users/kcosta/.brew/bin/python3
-
 from DSLR.core import load_csv, histogram
 
 import numpy as np

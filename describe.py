@@ -1,5 +1,3 @@
-#!/Users/kcosta/.brew/bin/python3
-
 import argparse
 from DSLR.core import describe
 
